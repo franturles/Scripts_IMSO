@@ -1,0 +1,15 @@
+list disk
+select disk 1
+convert dynamic
+create volume simple
+select disk 2
+convert dynamic
+select volume 2
+add disk 2
+assign letter R:
+
+list disk 
+select disk 2
+select volume 2
+create volume simple stripe siza=2048 disk=1,2
+assign letter S

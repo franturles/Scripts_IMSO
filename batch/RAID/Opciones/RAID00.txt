@@ -1,0 +1,5 @@
+list disk 
+select disk 0
+select volume 2
+create volume simple stripe siza=2048 disk=0,2
+assign letter S

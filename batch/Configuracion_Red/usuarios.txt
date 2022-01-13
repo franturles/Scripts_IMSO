@@ -1,0 +1,4 @@
+#NombreEquipo:interface:ip:mask:GW:dns1
+Fran:Ethernet:10.0.8.212:255.255.0.0:10.0.254.1:1.1.1.1
+Adrian:Ethernet:10.0.8.213:255.255.0.0:10.0.254.1:1.1.1.1
+Pazos:Ethernet:10.0.8.214:255.255.0.0:10.0.254.1:1.1.1.1

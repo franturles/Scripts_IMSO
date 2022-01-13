@@ -1,0 +1,12 @@
+#Apellido1;Apellido2;Nombre;Cargo;Turno
+Carrón;Surribas;Diego;Administrativo;7:00 a 15:00
+Corral;Fernández;Alejandro;Administrativo;7:00 a 15:00
+Feijoo;Feijoo;Tomás;Administrativo;7:00 a 15:00
+Fernández;Pazos;Javier;Administrativo;7:00 a 15:00
+García;González;Alejandro;Administrativo;7:00 a 15:00
+García;González;Daniel;Administrativo;15:00 a 23:00
+García;Ramos;Miguel;Administrativo;15:00 a 23:00
+Lazara;Fernández;Francisco;Administrativo;15:00 a 23:00
+Penas;Rouco;Adrian;Administrativo;15:00 a 23:00
+Rodríguez;Baldonedo;Santi;Administrativo;15:00 a 23:00
+Rodríguez;Dos Santos;Jesús;Jefe Departamento;7:00 a 23:02

@@ -1,0 +1,55 @@
+@echo on
+set
+if "%1" == /? (
+type Ayuda.txt)
+echo Que quieres hacer?
+echo 1.Acceso
+echo 2.Salir
+choice /C:123
+if errorlevel == 3 goto RAID
+if errorlevel == 2 goto Salir
+if errorlevel == 1 goto Acceso
+
+:Acceso
+net use X: \\10.0.8.200\examen /user:examen passexamen
+copy \\10.0.8.200\examen\datos.dat
+
+
+net localgroup g-usuarios /add
+cls
+for /f "eol=# delims=: tokens=1-2" %%n in (datos.dat) do (
+		set Usuario=%%n
+		set ip=%%p
+		net user %%n abc123. /add
+		net localgroup g-usuarios %%n /add
+		)
+:RAID
+echo list disk >> DiskPrueba.txt
+diskpart /s DiskPrueba.txt
+if exist DiskPrueba.txt (
+del DiskPrueba.txt 
+)
+set /p RAID01= "Selecciona un Disco: "
+set /p RAID02= "Selecciona un Disco: "
+echo select disk %RAID01% >> DiskPrueba.txt
+echo convert dynamic >> DiskPrueba.txt
+echo select disk %RAID02% >> DiskPrueba.txt
+echo convert dynamic >> DiskPrueba.txt
+echo select volume 1 >> DiskPrueba.txt
+echo create volume stripe size=2048 disk="%RAID01%,%RAID02%" >> DiskPrueba.txt
+echo list volume >> DiskPrueba.txt
+echo select volume 3 >> DiskPrueba.txt
+echo format fs=ntfs label="Seccionado" quick >> DiskPrueba.txt
+echo assign letter S: >> DiskPrueba.txt
+diskpart /s DiskPrueba.txt
+if exist DiskPrueba.txt (
+del DiskPrueba.txt 
+)
+goto Salir
+pause
+cls
+
+
+
+:Salir
+

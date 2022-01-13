@@ -1,0 +1,5 @@
+Con la opcion C crea los Usuarios
+Con la opcion B Borra los Usuarios
+Con la opcion M los Muestra
+Con la opcion E sale del menu
+Con el parametro /? salta esta ayuda

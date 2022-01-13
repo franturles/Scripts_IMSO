@@ -1,0 +1,4 @@
+plcopia.bat [/?][origen][dir_destino]
+ ▪/? : ayuda del comando
+ ▪Origen: directorio/ruta del que se realiza copia
+ ▪Destino: directorio/ruta del dirección de destino de la copia
