@@ -1,0 +1,16 @@
+foreach ($user in $newUsers) {
+    new-aduser -samaccountname $user.samaccountname  `
+           -userprincipalname $user.upn `
+           -name $user.name ` 
+           -displayname $user.displayname `
+           -givenname $user.givenname `
+           -surname $user.surname `
+           -Path "ou=users,ou=corporate,DC=mydomain,DC=com" `
+           -accountpassword (convertto-securestring "MyPASSWORD" -asplaintext -force) `
+           -enabled $true `
+           -homedrive "H" `
+           -homedirectory "\\Servername\folder\$($user.samaccountname)"
+    } # end foreach $user
+
+Remove-LocalUser "Direccion1" 
+j
