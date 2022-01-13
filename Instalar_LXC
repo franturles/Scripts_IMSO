@@ -1,0 +1,126 @@
+#INSTALACION DE LXC
+sudo apt-get install zfsutils-linux snapd
+sudo apt install lxd snap
+sudo snap install lxd 
+sudo lxd init
+## Si hay un posible error
+Edita /etc/evironment y añade /nap/bin en la lista entonces reinicia tu sistema
+
+#AÑADIR USUARIO EN EL GRUPO DE LXD
+sudo usermod -a -G lxd usuario
+cat /etc/passwd
+cat /etc/group
+
+#LISTAR DISPOSITIVOS DE ALMACENAMIENTO Y COMPROBACIONES
+sudo lxc 
+sudo lxc storage list
+zpool status
+zfs list
+
+#IMPORTAR IMAGEN Y EJECUTARLA
+lxc remote list
+lxc image list ubuntu:
+lxc image list images: | grep debian
+lxc launch ubuntu:ffae848ee5a0 imso01
+lxc list
+	
+	#CREAR/BORRAR VARIOS CONTAINERS AL MISMO TIEMPO	
+	for i in {1..20}; doe lxc launch ubuntu20 imso1$i ; done
+	for i in {1..20}; do lxc stop ubuntu20 imso1$i ; lxc delete imso1$i ; done
+
+
+#BORRAR CONTENEDORES
+lxc stop ubuntu20 imso
+lxc delete ubuntu20 imso
+
+#ASIGNARLE UN ALIAS AL CONTENEDOR
+lxc image list local:
+lxc image alias create ubuntu20 ffae848ee5a0
+lxc launch ubuntu20 imso02
+
+#TRABAJAR DESDE UN CONTAINER
+lxc exec imso01 -- ip a
+lxc exec imso01 -- bash
+
+
+#PERFILES Y CREAR UNA RED
+lxc ls -c n,4,s,p,sl
+lxc profile list
+lxc profile show default
+lxc network list
+lxc network show *nombre*
+*lxc network create aula ipv4.address=192.168.1.1/24 ipv6.address=none ipv4.dhcp=true 	  ipv4.dhcp.ranges="192.168.1.100-192.168.1.150" ipv4.firewall=true ipv4.nat=true
+*lxc network edit aula "NO TABULES"
+*
+
+lxc launch local:ubuntu20 imso04 -p aula #creamos maquina con el perfil creado
+lxc profile edit aula
+
+------------------------------------------------------
+		config: {}
+	description: Perfil aula1
+	devices:
+	  eth0:
+	    name: eth0
+	    nictype: bridged
+	    parent: aula1
+	    type: nic
+	  root:
+	    path: /
+	    pool: default
+	    type: disk
+	name: aula1
+	used_by: []
+-------------------------------------------------------
+
+lxc profile copy aula1 aula2 #PODEMOS COPIAR EL PERFIL CREADO ANTERIORMENTE PARA EDITAR POCAS COSAS
+dhclient -v
+
+#NETPLAN CONFIGURACION
+---------------------------------------------------------------------------------
+network:
+    version: 2
+    ethernets:
+        eth0:
+            addresses: [192.168.2.50/24]
+            gateway4: 192.168.2.10
+            nameservers:
+               addresses: [1.1.1.1]
+
+---------------------------------------------------------------------------------
+	#PARA APLICAR LOS CAMBIOS DEL NETPLAN Y PARA VER SI TIENE ERRORES
+	netplan apply
+	netplan generate
+#IPTABLES 
+iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
+iptables -t nat -L
+	#GUARDAR REGLAS IPTABLES	
+	apt-get install iptables-persistent
+	iptables-save > /etc/iptables/rules.v4 
+
+#TRABAJO CLASE
+iptables -t nat -A POSTROUTING -j MASQUERADE
+iptables -t nat -A PREROUTING -p tcp --dport 25000 -j DNAT --to-destination 192.168.2.146:22
+
+#PERFIL DE LIMITES
+---------------------------------------------------------------------------------
+config:
+  limits.cpu: "1"
+  limits.cpu.allowance: 30%
+  limits.memory: 200MB
+  limits.memory.enforce: soft
+description: "Perfil con Limites"
+devices:
+  root:
+    path: /
+    pool: default
+    type: disk
+    size: 12GB
+name: limites
+used_by: []
+--------------------------------------------------------------------------------
+
+## APLICAR PERFIL DE LIMITES
+for i in {1..13}; do lxc profile add IMSO$i limites ; done
+
+
